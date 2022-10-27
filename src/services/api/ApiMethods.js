@@ -18,11 +18,11 @@ export default {
         return true;
     },
     async checkUser() {
-        await ApiPublic().post('user').then(response => {
-            if (response.data.isEmpty)
-                return false;
+        let user;
+        await ApiProtected().post('user').then(response => {
+            user = response.data;
         });
-        return true;
+        return !(user && Object.keys(user).length === 0 && Object.getPrototypeOf(user) === Object.prototype);
     },
     async getWorkers() {
         let workers;
@@ -108,5 +108,11 @@ export default {
         })
         return result;
     },
-
+    async getTrackersByFilters(data) {
+        let result;
+        await ApiProtected().post('trackers/filters', data).then(response => {
+            result = response.data;
+        });
+        return result
+    },
 }

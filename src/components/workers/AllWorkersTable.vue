@@ -64,6 +64,9 @@ export default {
 </script>
 
 <style scoped>
+tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
 table {
   width: 100%;
   font-size: 1.1rem;
@@ -76,7 +79,6 @@ table tr th {
 table tr td {
   padding: 8px 15px;
 }
-
 table tbody tr {
   border-radius: 5px;
   transition: 0.1s;

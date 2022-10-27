@@ -29,13 +29,13 @@
     <tr v-for="tracker in trackers" :key="tracker.id">
       <td>{{tracker.phone}}</td>
 
-      <td v-if="tracker.balance">
+      <td v-if="tracker.balance" class="balance">
         {{tracker.balance}} р.
       </td>
       <td v-else>Нет данных</td>
 
-      <td v-if="tracker.charge">
-        {{tracker.charge}}%
+      <td v-if="tracker.power" class="power">
+        {{tracker.power}} %
       </td>
       <td v-else>Нет данных</td>
 
@@ -46,13 +46,15 @@
         {{tracker.person.surname}} {{tracker.person.name}} {{tracker.person.patronymic}}
       </td>
 
-      <td v-if="tracker.position.address">{{tracker.position.address}}</td>
+      <td v-if="tracker.position[0]">{{tracker.position[0].address}}</td>
       <td v-else>Нет данных</td>
 
-      <td>
-        <ButtonWhite>На карте</ButtonWhite>
+      <td class="white-button">
+        <router-link :to="{name:'tracker-info',params:{id:tracker.id}}">
+          <ButtonWhite>На карте</ButtonWhite>
+        </router-link>
       </td>
-      <td>
+      <td class="white-button">
         <router-link :to="{name:'tracker-edit',params:{id:tracker.id}}">
           <ButtonWhite>Изменить</ButtonWhite>
         </router-link>
@@ -67,6 +69,7 @@
 import ButtonWhite from "@/components/ui/ButtonWhite";
 import {useGetAllTrackers} from "@/services/hooks/useGetAllTrackers";
 import LoadingCircle from "@/components/ui/LoadingCircle";
+
 export default {
   name: "AllTrackersTable",
   components: {
@@ -75,18 +78,30 @@ export default {
   },
   data() {
     return {
-      trackers: null
+      trackers: null,
     }
   },
   mounted() {
     useGetAllTrackers().then(t => {
       this.trackers = t
     });
+  },
+  methods: {
+
   }
 }
 </script>
 
 <style scoped>
+tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+.power {
+  width: 120px;
+}
+.balance {
+  width: 130px;
+}
 table {
   width: 100%;
   font-size: 1.1rem;
@@ -113,5 +128,8 @@ table {
   border-collapse: separate;
   text-indent: initial;
   border-spacing: 0;
+}
+.white-button {
+  width: 180px;
 }
 </style>

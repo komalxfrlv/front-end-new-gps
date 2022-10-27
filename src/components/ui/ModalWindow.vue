@@ -45,7 +45,7 @@ export default {
   z-index: 228;
 }
 .modal-inner {
-  max-width: 500px;
+  width: max-content;
   margin: 6rem auto;
   background: white;
   padding: 20px;

@@ -20,9 +20,9 @@
       <router-link to="/workers">
         <div class="link"><img src="@/assets/icons/people.svg" alt="Работники" class="nav-icon">Сотрудники</div>
       </router-link>
-      <a href="#">
+      <router-link to="/map">
         <div class="link"><img src="@/assets/icons/map.svg" alt="Карта" class="nav-icon">Карта</div>
-      </a>
+      </router-link>
       <div class="exit">
         <ButtonWhite @click="tryLogout">Выход</ButtonWhite>
       </div>
@@ -37,6 +37,7 @@
 import ButtonWhite from "@/components/ui/ButtonWhite";
 import {useLogout} from "@/services/hooks/useLogout";
 import {useCheckUser} from "@/services/hooks/useCheckUser";
+import router from "@/router";
 
 export default {
   components: {ButtonWhite},
@@ -47,7 +48,9 @@ export default {
   },
   methods: {
     tryLogout() {
-      useLogout();
+      useLogout().then(() => {
+        router.push({name: 'login'});
+      });
     },
   },
   async mounted() {
