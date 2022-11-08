@@ -38,7 +38,31 @@
       <button-gradient @click="applyFilters">НАЙТИ</button-gradient>
     </div>
     <LoadingCircle v-else></LoadingCircle>
-    <p>{{trackers}}</p>
+
+
+    <!--========== КАРТЫ ==========--->
+    <l-map v-if="trackers" :zoom="zoom" :center="center" style="height: 500px;"
+           :maxZoom="18" :maxNativeZoom="18" :options="mapOptions">
+      <l-tile-layer :url="url"/>
+
+      <l-marker v-for="tracker in trackers" :key="tracker.id"
+                :lat-lng="preformPosition(tracker.positions[0].latitude, tracker.positions[0].longitude)">
+        <l-tooltip :options="{ permanent: true, interactive: true }">
+          {{tracker.imei}}
+        </l-tooltip>
+      </l-marker>
+
+      <l-polyline
+          v-for="(polyline,index) in this.geos"
+          v-bind:key="index"
+          :lat-lngs="polyline.latlngs"
+          :color="'#' + Math.floor(Math.random()*16777215).toString(16)">
+      </l-polyline>
+
+    </l-map>
+
+
+
     <ModalWindow :open="isOpenModalCars" @close="isOpenModalCars = !isOpenModalCars">
       <li v-for="car in carsList" :key="car.id">
         <input v-model="filters.carsSelected" :value="car.id" type="checkbox" />
@@ -47,7 +71,6 @@
         {{car.reg_number}}
       </li>
     </ModalWindow>
-
     <ModalWindow :open="isOpenModalWorkers" @close="isOpenModalWorkers = !isOpenModalWorkers">
       <li v-for="worker in workersList" :key="worker.id">
         <input v-model="filters.workersSelected" :value="worker.id" type="checkbox" />
@@ -56,6 +79,7 @@
         {{worker.patronymic}}
       </li>
     </ModalWindow>
+
   </div>
 </template>
 
@@ -68,10 +92,13 @@ import moment from "moment";
 import {useGetTrackersByFilter} from "@/services/hooks/useGetTrackersByFilter";
 import {cities} from "@/services/data/cities";
 import LoadingCircle from "@/components/ui/LoadingCircle";
+import {latLng} from "leaflet";
+import {LMap, LTileLayer, LMarker, LTooltip, LPolyline} from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css";
 
 export default {
   name: "MapView",
-  components: {LoadingCircle, ButtonGradient, ModalWindow},
+  components: {LoadingCircle, ButtonGradient, ModalWindow, LMap, LTileLayer, LMarker, LTooltip, LPolyline},
   data() {
     return {
       trackers: null,
@@ -87,6 +114,21 @@ export default {
       isOpenModalWorkers: false,
       workersList: null,
       cities: cities(),
+
+      zoom: 8.5,
+      center: latLng(56.8490735,60.5628915),
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '',
+      withTooltip: true,
+      currentZoom: 12.5,
+      currentCenter: null,
+      showParagraph: false,
+      mapOptions: {
+        attributionControl: false,
+      },
+      showMap: true,
+      polyline: null,
+      geos: [],
     }
   },
   mounted() {
@@ -101,6 +143,7 @@ export default {
     applyFilters() {
       useGetTrackersByFilter(this.filters).then(t => {
         this.trackers = t;
+        this.preformHistory(t);
       });
     },
     cars(id) {
@@ -118,7 +161,24 @@ export default {
       }
       else
         return []
-    }
+    },
+    preformPosition(lat, lng) {
+      return latLng(lat, lng);
+    },
+    preformHistory(trackers) {
+      let polyLines = [];
+      trackers.forEach(function(tracker){
+        let geos = {};
+        let tracker_geo = [];
+        tracker.positions.forEach(function (geo){
+          tracker_geo.push([geo.latitude, geo.longitude]);
+        })
+        geos.latlngs = tracker_geo;
+        //geos.color = ;
+        polyLines.push(geos);
+      })
+      this.geos = polyLines;
+    },
   }
 }
 </script>

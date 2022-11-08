@@ -3,8 +3,9 @@
     <h1>Трекер {{tracker.imei}}</h1>
     <div class="container">
       <div class="block">
-        <l-map :zoom="zoom" :center="center" style="height: 500px;">
-          <l-tile-layer :url="url" :attribution="attribution"/>
+        <l-map :zoom="zoom" :center="center" style="height: 500px;"
+               :maxZoom="18" :maxNativeZoom="18" :options="mapOptions">
+          <l-tile-layer :url="url"/>
           <l-marker :lat-lng="withTooltip">
             <l-tooltip :options="{ permanent: true, interactive: true }">
               {{tooltipInfo}}
@@ -114,7 +115,6 @@ export default {
       currentCenter: null,
       showParagraph: false,
       mapOptions: {
-        zoomSnap: 0.5,
         attributionControl: false,
       },
       showMap: true,

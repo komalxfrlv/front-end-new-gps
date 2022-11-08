@@ -9,7 +9,7 @@
     <ModalWindow :open="isOpenModal" @close="isOpenModal = !isOpenModal">
       <AddTracker></AddTracker>
     </ModalWindow>
-    <AllTrackersTable></AllTrackersTable>
+    <AllTrackersTable :trackersProps="trackers"></AllTrackersTable>
   </div>
 </template>
 
@@ -19,15 +19,21 @@ import ButtonGradient from "@/components/ui/ButtonGradient";
 import ModalWindow from "@/components/ui/ModalWindow";
 import {ref} from "vue";
 import AddTracker from "@/components/trackers/AddTracker";
+import {useGetAllTrackers} from "@/services/hooks/useGetAllTrackers";
 export default {
   name: "TrackersView",
   components: {AddTracker, ModalWindow, ButtonGradient, AllTrackersTable},
   setup() {
     const isOpenModal = ref(false);
-
+    const trackers = ref(null);
     return {
-      isOpenModal
+      isOpenModal, trackers
     }
+  },
+  mounted() {
+    useGetAllTrackers().then(t => {
+      this.trackers = t
+    });
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <table v-if="trackers">
+  <table v-if="trackersProps">
     <thead>
     <tr>
       <th>
@@ -26,7 +26,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="tracker in trackers" :key="tracker.id">
+    <tr v-for="tracker in trackersProps" :key="tracker.id">
       <td>{{tracker.phone}}</td>
 
       <td v-if="tracker.balance" class="balance">
@@ -67,11 +67,11 @@
 
 <script>
 import ButtonWhite from "@/components/ui/ButtonWhite";
-import {useGetAllTrackers} from "@/services/hooks/useGetAllTrackers";
 import LoadingCircle from "@/components/ui/LoadingCircle";
 
 export default {
   name: "AllTrackersTable",
+  props: ['trackersProps'],
   components: {
     LoadingCircle,
     ButtonWhite
@@ -81,14 +81,6 @@ export default {
       trackers: null,
     }
   },
-  mounted() {
-    useGetAllTrackers().then(t => {
-      this.trackers = t
-    });
-  },
-  methods: {
-
-  }
 }
 </script>
 

@@ -89,7 +89,7 @@ export default {
     },
     async getTrackerById(id) {
         let tracker;
-        await ApiProtected().get('trackers/'.concat(id)).then(response => {
+        await ApiProtected().get('trackers/show/'.concat(id)).then(response => {
             tracker = response.data
         })
         return tracker;
@@ -113,6 +113,34 @@ export default {
         await ApiProtected().post('trackers/filters', data).then(response => {
             result = response.data;
         });
-        return result
+        return result;
     },
+    async getLowBatteryTrackers() {
+        let trackers;
+        await ApiProtected().get('/trackers/low-battery').then(response => {
+            trackers = response.data
+        })
+        return trackers;
+    },
+    async getLowBalanceTrackers() {
+        let trackers;
+        await ApiProtected().get('/trackers/low-balance').then(response => {
+            trackers = response.data
+        })
+        return trackers;
+    },
+    async getNowOfflineTrackers() {
+        let trackers;
+        await ApiProtected().get('/trackers/now-offline').then(response => {
+            trackers = response.data
+        })
+        return trackers;
+    },
+    async getTrackersInCity(data) {
+        let trackers;
+        await ApiProtected().post('/trackers/now-in-city', data).then(response => {
+            trackers = response.data
+        })
+        return trackers;
+    }
 }
