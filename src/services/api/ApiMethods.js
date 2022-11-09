@@ -12,7 +12,7 @@ export default {
         return true;
     },
     async registerNewUser(data) {
-        await ApiPublic().post('login', data).then(response => {
+        await ApiPublic().post('register', data).then(response => {
             cookies.set('user_token', response.data.access_token, 3600);
         });
         return true;
