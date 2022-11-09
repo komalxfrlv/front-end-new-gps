@@ -1,4 +1,5 @@
 <template>
+  <h1>Авторизация</h1>
   <div class="form">
     <div class="input-box">
       <input type="email" name="email" alt="email" placeholder="E-Mail" v-model="data.email" class="login-input">
@@ -7,9 +8,12 @@
       <input type="password" name="password" alt="password" placeholder="Пароль" v-model="data.password"
              class="login-input">
     </div>
-    <div class="input-box">
-      <button @click="tryAuth" class="login-button">Войти</button>
+    <div class="input-box button-box">
+      <button-gradient @click="tryAuth">Войти</button-gradient>
     </div>
+    <router-link to="/register">
+      <button class="login-button">Регистрация</button>
+    </router-link>
   </div>
 </template>
 
@@ -17,9 +21,11 @@
 import {useAuth} from "@/services/hooks/useAuth";
 import {useCheckUser} from "@/services/hooks/useCheckUser";
 import router from "@/router";
+import ButtonGradient from "@/components/ui/ButtonGradient";
 
 export default {
   name: "LoginForm",
+  components: {ButtonGradient},
   data() {
     return {
       data: {
@@ -44,10 +50,15 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  margin-top: 100px;
+}
+.button-box {
+  margin-bottom: 40px !important;
+}
 .form {
   width: 400px;
 }
-
 .login-input {
   font-size: 20px;
   font-weight: 200;

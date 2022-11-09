@@ -10,7 +10,7 @@
             <h2>Выбранные автомобили</h2>
             <div class="cars">
               <ul class="notification-badges">
-                <li v-for="c in filters.carsSelected" :key="c">{{cars(c)}}</li>
+                <li v-for="c in filters.carsSelected" :key="c">{{ cars(c) }}</li>
               </ul>
             </div>
           </div>
@@ -19,9 +19,9 @@
           <button-gradient @click="isOpenModalWorkers = true">Выберите Сотрудников</button-gradient>
           <div class="selected-workers">
             <h2>Выбранные сотрудники</h2>
-            <div class="workers" >
+            <div class="workers">
               <ul class="notification-badges">
-                <li v-for="w in filters.workersSelected" :key="w">{{workers(w)}}</li>
+                <li v-for="w in filters.workersSelected" :key="w">{{ workers(w) }}</li>
               </ul>
             </div>
           </div>
@@ -32,51 +32,57 @@
         <b>По:</b><input class="datetime-picker f-input" type="datetime-local" v-model="filters.toDate">
         <b>Был в городе:</b>
         <select v-model="filters.selectedCity" name="city" id="city-select" class="f-input">
-          <option v-for="city in cities" :key="city">{{city}}</option>
+          <option v-for="city in cities" :key="city">{{ city }}</option>
         </select>
       </div>
-      <button-gradient @click="applyFilters">НАЙТИ</button-gradient>
+      <div class="container">
+        <div class="block-100">
+          <button-gradient @click="applyFilters" class="find-button">НАЙТИ</button-gradient>
+        </div>
+      </div>
     </div>
     <LoadingCircle v-else></LoadingCircle>
 
-
-    <!--========== КАРТЫ ==========--->
-    <l-map v-if="trackers" :zoom="zoom" :center="center" style="height: 500px;"
-           :maxZoom="18" :maxNativeZoom="18" :options="mapOptions">
-      <l-tile-layer :url="url"/>
-
-      <l-marker v-for="tracker in trackers" :key="tracker.id"
-                :lat-lng="preformPosition(tracker.positions[0].latitude, tracker.positions[0].longitude)">
-        <l-tooltip :options="{ permanent: true, interactive: true }">
-          {{tracker.imei}}
-        </l-tooltip>
-      </l-marker>
-
-      <l-polyline
-          v-for="(polyline,index) in this.geos"
-          v-bind:key="index"
-          :lat-lngs="polyline.latlngs"
-          :color="'#' + Math.floor(Math.random()*16777215).toString(16)">
-      </l-polyline>
-
-    </l-map>
-
-
+    <div class="container">
+      <div class="block-100">
+        <div class="map-box">
+          <l-map v-if="trackers" :zoom="zoom" :center="center" style="height: 600px;"
+                 :maxZoom="18" :maxNativeZoom="18" :options="mapOptions">
+            <l-tile-layer :url="url"/>
+            <l-marker v-for="tracker in trackers" :key="tracker.id"
+                      :lat-lng="preformPosition(tracker.positions[0].latitude, tracker.positions[0].longitude)">
+              <l-tooltip v-if="tracker.person" :options="{ permanent: true, interactive: true }">
+                {{ tracker.person.surname }} {{ tracker.person.name }} {{ tracker.person.patronymic }} <br>
+              </l-tooltip>
+              <l-tooltip v-if="tracker.car" :options="{ permanent: true, interactive: true }">
+                {{ tracker.car.mark }} {{ tracker.car.model }} {{ tracker.car.reg_number }}<br>
+              </l-tooltip>
+            </l-marker>
+            <l-polyline
+                v-for="(polyline,index) in this.geos"
+                v-bind:key="index"
+                :lat-lngs="polyline.latlngs"
+                :color="'#' + Math.floor(Math.random()*16777215).toString(16)">
+            </l-polyline>
+          </l-map>
+        </div>
+      </div>
+    </div>
 
     <ModalWindow :open="isOpenModalCars" @close="isOpenModalCars = !isOpenModalCars">
       <li v-for="car in carsList" :key="car.id">
-        <input v-model="filters.carsSelected" :value="car.id" type="checkbox" />
-        {{car.mark}}
-        {{car.model}}
-        {{car.reg_number}}
+        <input v-model="filters.carsSelected" :value="car.id" type="checkbox"/>
+        {{ car.mark }}
+        {{ car.model }}
+        {{ car.reg_number }}
       </li>
     </ModalWindow>
     <ModalWindow :open="isOpenModalWorkers" @close="isOpenModalWorkers = !isOpenModalWorkers">
       <li v-for="worker in workersList" :key="worker.id">
-        <input v-model="filters.workersSelected" :value="worker.id" type="checkbox" />
-        {{worker.name}}
-        {{worker.surname}}
-        {{worker.patronymic}}
+        <input v-model="filters.workersSelected" :value="worker.id" type="checkbox"/>
+        {{ worker.name }}
+        {{ worker.surname }}
+        {{ worker.patronymic }}
       </li>
     </ModalWindow>
 
@@ -114,9 +120,8 @@ export default {
       isOpenModalWorkers: false,
       workersList: null,
       cities: cities(),
-
       zoom: 8.5,
-      center: latLng(56.8490735,60.5628915),
+      center: latLng(56.8490735, 60.5628915),
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution: '',
       withTooltip: true,
@@ -147,19 +152,17 @@ export default {
       });
     },
     cars(id) {
-      if(this.carsList) {
+      if (this.carsList) {
         let c = [...this.carsList].find(car => car.id === id)
         return c.mark + ' ' + c.model + ' ' + c.reg_number;
-      }
-      else
+      } else
         return []
     },
     workers(id) {
-      if(this.workersList) {
+      if (this.workersList) {
         let w = [...this.workersList].find(wrk => wrk.id === id);
         return w.surname + ' ' + w.name;
-      }
-      else
+      } else
         return []
     },
     preformPosition(lat, lng) {
@@ -167,14 +170,13 @@ export default {
     },
     preformHistory(trackers) {
       let polyLines = [];
-      trackers.forEach(function(tracker){
+      trackers.forEach(function (tracker) {
         let geos = {};
         let tracker_geo = [];
-        tracker.positions.forEach(function (geo){
+        tracker.positions.forEach(function (geo) {
           tracker_geo.push([geo.latitude, geo.longitude]);
         })
         geos.latlngs = tracker_geo;
-        //geos.color = ;
         polyLines.push(geos);
       })
       this.geos = polyLines;
@@ -188,13 +190,21 @@ export default {
   text-align: center;
   margin-bottom: 8px;
 }
+
 .container {
-  display: flex; /* or inline-flex */
+  display: flex;
 }
+
 .block {
   width: 50%;
   padding: 10px;
 }
+
+.block-100 {
+  width: 100%;
+  padding: 10px;
+}
+
 .f-input {
   font-size: 18px;
   padding: 4px;
@@ -202,6 +212,7 @@ export default {
   margin-right: 5px;
   border: 0;
 }
+
 .notification-badges li {
   display: inline-block;
   min-width: 50px;

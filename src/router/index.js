@@ -11,6 +11,7 @@ import VirtualTrackers from "@/views/help/VirtualTrackers";
 import SingleTrackerView from "@/views/SingleTrackerView";
 import MapView from "@/views/MapView";
 import {useCheckUser} from "@/services/hooks/useCheckUser";
+import RegisterView from "@/views/RegisterView";
 
 const authGuard = function (to, from, next) {
     useCheckUser().then(user => {
@@ -22,11 +23,28 @@ const authGuard = function (to, from, next) {
     });
 }
 
+const loggedIn = function (to, from, next) {
+    useCheckUser().then(user => {
+        if (user) {
+            next({name: 'home'});
+        } else {
+            next();
+        }
+    });
+}
+
 const routes = [
     {
         path: '/login',
         name: 'login',
         component: LoginView,
+        beforeEnter: loggedIn,
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: RegisterView,
+        beforeEnter: loggedIn,
     },
     {
         path: '/',

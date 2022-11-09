@@ -42,7 +42,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   background: linear-gradient(34deg, rgba(175, 65, 181, 0.6) 0%, rgba(151, 69, 191, 0.6) 25%, rgba(110, 70, 169, 0.6) 50%, rgb(84, 69, 191, 0.6) 75%, rgba(128, 53, 135, 0.6) 100%, rgba(65, 81, 181, 0.6) 100%);
-  z-index: 228;
+  z-index: 1488;
 }
 .modal-inner {
   width: max-content;

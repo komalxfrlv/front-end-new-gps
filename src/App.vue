@@ -49,6 +49,7 @@ export default {
   methods: {
     tryLogout() {
       useLogout().then(() => {
+        this.isAuth = false;
         router.push({name: 'login'});
       });
     },
