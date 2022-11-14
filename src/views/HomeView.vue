@@ -6,7 +6,7 @@
         <div class="block">
           <h2>
             Трекеры в городе
-            <select v-model="selectedCity" name="city" id="city-select" class="f-input">
+            <select @change="getTNowInCity(this.selectedCity)" v-model="selectedCity" name="city" id="city-select" class="f-input">
               <option v-for="city in cities" :key="city">{{city}}</option>
             </select>
           </h2>
