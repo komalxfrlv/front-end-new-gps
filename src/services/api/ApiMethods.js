@@ -7,19 +7,22 @@ const {cookies} = useCookies();
 export default {
     async logout() {
         await ApiProtected().post('logout').then(() => {
-            cookies.remove('user_token');
+            //cookies.remove('user_token');
+            localStorage.removeItem('user_token');
         });
         return true;
     },
     async registerNewUser(data) {
         await ApiPublic().post('register', data).then(response => {
-            cookies.set('user_token', response.data.access_token, 3600);
+            //cookies.set('user_token', response.data.access_token, 3600);
+            localStorage.setItem('user_token', response.data.access_token);
         });
         return true;
     },
     async getTokenByLogin(data) {
         await ApiPublic().post('login', data).then(response => {
-            cookies.set('user_token', response.data.access_token, 3600);
+            //cookies.set('user_token', response.data.access_token, 3600);
+            localStorage.setItem('user_token', response.data.access_token);
         });
         return true;
     },
