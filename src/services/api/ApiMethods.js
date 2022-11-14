@@ -1,8 +1,8 @@
 import ApiPublic from "@/services/api/ApiPublic";
 import ApiProtected from "@/services/api/ApiProtected";
-import {useCookies} from "vue3-cookies";
+//import {useCookies} from "vue3-cookies";
 
-const {cookies} = useCookies();
+//const {cookies} = useCookies();
 
 export default {
     async logout() {
