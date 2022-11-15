@@ -1,5 +1,6 @@
 import ApiPublic from "@/services/api/ApiPublic";
 import ApiProtected from "@/services/api/ApiProtected";
+import store from "@/store";
 //import {useCookies} from "vue3-cookies";
 
 //const {cookies} = useCookies();
@@ -9,6 +10,7 @@ export default {
         await ApiProtected().post('logout').then(() => {
             //cookies.remove('user_token');
             localStorage.removeItem('user_token');
+            store.commit('changeLoggedInState', false);
         });
         return true;
     },
@@ -23,6 +25,10 @@ export default {
         await ApiPublic().post('login', data).then(response => {
             //cookies.set('user_token', response.data.access_token, 3600);
             localStorage.setItem('user_token', response.data.access_token);
+            if(response.data.access_token)
+                store.commit('changeLoggedInState', true);
+            else
+                store.commit('changeLoggedInState', false);
         });
         return true;
     },
@@ -30,6 +36,10 @@ export default {
         let user;
         await ApiProtected().post('user').then(response => {
             user = response.data;
+            if(!isNaN(response.data.id))
+                store.commit('changeLoggedInState', true);
+            else
+                store.commit('changeLoggedInState', false);
         });
         return !(user && Object.keys(user).length === 0 && Object.getPrototypeOf(user) === Object.prototype);
     },

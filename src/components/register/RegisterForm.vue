@@ -1,4 +1,5 @@
 <template>
+  <h1>Регистрация</h1>
   <div class="form">
     <div class="input-box">
       <input type="text" name="surname" alt="surname" placeholder="Фамилия" v-model="data.surname" class="input">

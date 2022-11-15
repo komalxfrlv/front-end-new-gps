@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="sidebar" v-if="isAuth">
+    <div class="sidebar" v-if="loggedIn">
       <h2>Geo Position</h2>
       <div class="avatar">
         <img alt="avatar" src="@/assets/avatar.jpg">
@@ -38,6 +38,7 @@ import ButtonWhite from "@/components/ui/ButtonWhite";
 import {useLogout} from "@/services/hooks/useLogout";
 import {useCheckUser} from "@/services/hooks/useCheckUser";
 import router from "@/router";
+import store from "@/store";
 
 export default {
   components: {ButtonWhite},
@@ -52,6 +53,11 @@ export default {
         this.isAuth = false;
         router.push({name: 'login'});
       });
+    },
+  },
+  computed: {
+    loggedIn() {
+      return store.state.loggedIn
     },
   },
   async mounted() {
