@@ -7,9 +7,9 @@
       </ButtonGradient>
     </div>
     <ModalWindow :open="isOpenModal" @close="isOpenModal = !isOpenModal">
-      <AddWorker></AddWorker>
+      <AddWorker @addWorkerToList="addWorkerToList"></AddWorker>
     </ModalWindow>
-    <AllWorkersTable></AllWorkersTable>
+    <AllWorkersTable :workers="workers"></AllWorkersTable>
   </div>
 </template>
 
@@ -19,16 +19,35 @@ import AllWorkersTable from "@/components/workers/AllWorkersTable";
 import ModalWindow from "@/components/ui/ModalWindow";
 import ButtonGradient from "@/components/ui/ButtonGradient";
 import AddWorker from "@/components/workers/AddWorker";
+import {useGetAllWorkers} from "@/services/hooks/useGetAllWorkers";
 
 export default {
   name: "WorkersView",
   components: {AddWorker, ButtonGradient, ModalWindow, AllWorkersTable},
+  data() {
+    return {
+      workers: {},
+    }
+  },
   setup() {
     const isOpenModal = ref(false);
 
     return {
-      isOpenModal
+      isOpenModal,
     }
+  },
+  async mounted() {
+    await useGetAllWorkers().then(w => {
+      this.workers = w;
+    });
+  },
+  methods: {
+    async addWorkerToList(res) {
+      if (res)
+        await useGetAllWorkers().then(w => {
+          this.workers = w;
+        });
+    },
   }
 }
 </script>

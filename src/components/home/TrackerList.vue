@@ -12,7 +12,10 @@
 
         <td>{{ tracker.phone }}</td>
 
-        <td>{{ tracker.imei }}</td>
+        <td v-if="marker === 'balance'">{{ tracker.balance }} руб.</td>
+
+        <td v-else-if="marker === 'power'">{{tracker.power}} %</td>
+        <td v-else>{{ tracker.imei }}</td>
       </tr>
     </table>
   </div>
@@ -21,7 +24,7 @@
 <script>
 export default {
   name: "TrackerList",
-  props: ['trackers'],
+  props: ['trackers', 'marker'],
 }
 </script>
 

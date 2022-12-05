@@ -29,7 +29,7 @@
     </div>
     <ButtonGradient @click="editCar(this.carToEdit)">СОХРАНИТЬ</ButtonGradient>
     <div class="delete-button">
-      <ButtonRed>УДАЛИТЬ</ButtonRed>
+      <ButtonRed @click="deleteCar">УДАЛИТЬ</ButtonRed>
     </div>
   </div>
   <LoadingCircle v-else></LoadingCircle>
@@ -44,6 +44,8 @@ import {useRoute} from "vue-router";
 import {useUpdateCar} from "@/services/hooks/useUpdateCar";
 import ButtonRed from "@/components/ui/ButtonRed";
 import LoadingCircle from "@/components/ui/LoadingCircle";
+import router from "@/router";
+import {useDeleteCar} from "@/services/hooks/useDeleteCar";
 
 export default {
   name: "EditCarPage",
@@ -53,6 +55,10 @@ export default {
       await useUpdateCar(data).then(result => {
         this.result = result;
       })
+    },
+    async deleteCar() {
+      await useDeleteCar(this.route.params.id);
+      await router.push('/cars');
     },
   },
   setup() {

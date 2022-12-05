@@ -29,7 +29,7 @@
     </div>
     <ButtonGradient @click="editWorker(this.workerToEdit)">СОХРАНИТЬ</ButtonGradient>
     <div class="delete-button">
-      <ButtonRed>УДАЛИТЬ</ButtonRed>
+      <ButtonRed @click="deleteWorker">УДАЛИТЬ</ButtonRed>
     </div>
   </div>
   <LoadingCircle v-else></LoadingCircle>
@@ -43,6 +43,8 @@ import ButtonRed from "@/components/ui/ButtonRed";
 import {useUpdateWorker} from "@/services/hooks/useUpdateWorker";
 import {useGetWorkerById} from "@/services/hooks/useGetWorkerById";
 import LoadingCircle from "@/components/ui/LoadingCircle";
+import router from "@/router";
+import {useDeletePerson} from "@/services/hooks/useDeletePerson";
 
 export default {
   name: "EditWorkerPage",
@@ -52,6 +54,10 @@ export default {
       await useUpdateWorker(data).then(result => {
         this.result = result;
       })
+    },
+    async deleteWorker() {
+      await useDeletePerson(this.route.params.id);
+      await router.push('/workers');
     },
   },
   setup() {

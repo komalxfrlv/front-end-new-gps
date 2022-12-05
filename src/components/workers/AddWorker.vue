@@ -27,7 +27,7 @@
       <label>Адрес</label>
       <input v-model="worker.address">
     </div>
-    <ButtonGradient @click="addWorker(this.worker)">ДОБАВИТЬ</ButtonGradient>
+    <ButtonGradient @click="addWorker()">ДОБАВИТЬ</ButtonGradient>
   </div>
 </template>
 
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       worker: {
+        id: null,
         name: '',
         surname: '',
         patronymic: '',
@@ -53,15 +54,18 @@ export default {
     }
   },
   methods: {
-    async addWorker(data) {
-      await useAddWorker(data).then(res => {
+    async addWorker() {
+      await useAddWorker(this.worker).then(res => {
+        this.$emit('addWorkerToList', res);
         this.result = res;
+      }).then(() => {
         this.worker.name = '';
         this.worker.surname = '';
         this.worker.patronymic = '';
         this.worker.phone = '';
         this.worker.address = '';
       });
+
     }
   }
 }

@@ -42,24 +42,26 @@
 
 <script>
 import ButtonWhite from "@/components/ui/ButtonWhite";
-import {useGetAllWorkers} from "@/services/hooks/useGetAllWorkers";
+//import {useGetAllWorkers} from "@/services/hooks/useGetAllWorkers";
 import LoadingCircle from "@/components/ui/LoadingCircle";
 export default {
   name: "AllWorkersTable",
+  props: ['workers'],
   components: {
     LoadingCircle,
     ButtonWhite
   },
   data() {
     return {
-      workers: null
+      //workers: null
     }
   },
+  /*
   mounted() {
     useGetAllWorkers().then(w => {
       this.workers = w;
     })
-  }
+  }*/
 }
 </script>
 

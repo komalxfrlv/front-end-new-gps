@@ -42,7 +42,7 @@
     </div>
     <ButtonGradient @click="editTracker(this.updatedTracker)">СОХРАНИТЬ</ButtonGradient>
     <div class="delete-button">
-      <ButtonRed>УДАЛИТЬ</ButtonRed>
+      <ButtonRed @click="deleteTracker">УДАЛИТЬ</ButtonRed>
     </div>
   </div>
   <LoadingCircle v-else></LoadingCircle>
@@ -58,6 +58,8 @@ import LoadingCircle from "@/components/ui/LoadingCircle";
 import ButtonGradient from "@/components/ui/ButtonGradient";
 import {useGetAllCars} from "@/services/hooks/useGetAllCars";
 import {useGetAllWorkers} from "@/services/hooks/useGetAllWorkers";
+import {useDeleteTracker} from "@/services/hooks/useDeleteTracker";
+import router from "@/router";
 
 export default {
   name: "EditTrackerPage",
@@ -67,6 +69,10 @@ export default {
       await useUpdateTracker(data).then(result => {
         this.result = result;
       })
+    },
+    async deleteTracker() {
+      await useDeleteTracker(this.route.params.id);
+      await router.push('/trackers');
     },
   },
   setup() {

@@ -161,5 +161,26 @@ export default {
             trackers = response.data
         })
         return trackers;
-    }
+    },
+    async deleteTrackerById(id) {
+        let tracker;
+        await ApiProtected().delete('trackers/delete/'.concat(id)).then(response => {
+            tracker = response.data
+        })
+        return tracker;
+    },
+    async deleteCarById(id) {
+        let car;
+        await ApiProtected().delete('cars/delete/'.concat(id)).then(response => {
+            car = response.data
+        })
+        return car;
+    },
+    async deletePersonById(id) {
+        let person;
+        await ApiProtected().delete('people/delete/'.concat(id)).then(response => {
+            person = response.data
+        })
+        return person;
+    },
 }

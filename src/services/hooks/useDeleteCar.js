@@ -1,8 +1,8 @@
 import apiMethods from "@/services/api/ApiMethods";
 
-export async function useGetWorkerById(id) {
+export async function useDeleteCar(id) {
     let car;
-    await apiMethods.getWorkerById(id).then(c => {
+    await apiMethods.deleteCarById(id).then(c => {
         car = c
     });
     return car;

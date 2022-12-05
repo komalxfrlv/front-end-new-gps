@@ -23,12 +23,12 @@
         <div class="block">
           <h2>Низкий заряд</h2>
           <div class="separator"></div>
-          <TrackerList :trackers="lowBattery"></TrackerList>
+          <TrackerList :marker="'power'" :trackers="lowBattery"></TrackerList>
         </div>
         <div class="block">
           <h2>Низкий баланс</h2>
           <div class="separator"></div>
-          <TrackerList :trackers="lowBalance"></TrackerList>
+          <TrackerList :marker="'balance'" :trackers="lowBalance"></TrackerList>
         </div>
       </div>
     </div>
